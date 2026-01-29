@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 from models import Products
+from database import session, engine
+import database_models
+
 app = FastAPI()
+
+database_models.Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 def greet():
@@ -16,6 +21,8 @@ products = [
 
 @app.get("/products")
 def get_all_products():
+    # db connection 
+    db = session()
     return products
 
 @app.get("/product/{id}")
